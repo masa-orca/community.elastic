@@ -74,7 +74,7 @@ class ElasticHelpers():
                                 timeout=self.module.params['timeout'],
                                 *self.module.params['connection_options'],
                                 **auth)
-        module.fail_json(elastic.info())
+        self.module.fail_json(elastic.info())
         return elastic
 
     def query(self, client, index, query):
