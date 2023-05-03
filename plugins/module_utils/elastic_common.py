@@ -77,7 +77,7 @@ class ElasticHelpers():
                                 **auth)
         elastic_info = elastic.info()
         # self.version = elastic_info.number
-        self.module.fail_json(elastic_info.keys())
+        self.module.fail_json(elastic_info.version)
         return elastic
 
     def query(self, client, index, query):
