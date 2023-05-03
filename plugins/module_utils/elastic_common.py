@@ -76,8 +76,8 @@ class ElasticHelpers():
                                 *self.module.params['connection_options'],
                                 **auth)
         elastic_info = elastic.info()
-        self.version = elastic_info.number
-        self.module.fail_json(self.version)
+        # self.version = elastic_info.number
+        self.module.fail_json(elastic_info.keys())
         return elastic
 
     def query(self, client, index, query):
