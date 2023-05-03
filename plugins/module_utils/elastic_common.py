@@ -75,7 +75,8 @@ class ElasticHelpers():
                                 timeout=self.module.params['timeout'],
                                 *self.module.params['connection_options'],
                                 **auth)
-        self.version = elastic.info()['number']
+        elastic_info = elastic.info()
+        self.version = elastic_info['number']
         self.module.fail_json(self.version)
         return elastic
 
