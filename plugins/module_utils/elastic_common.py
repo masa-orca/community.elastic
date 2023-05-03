@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib  # pylint: disable=unused-import
+from ansible.module_utils.compat.version import LooseVersion
 
 import traceback
 
@@ -75,8 +76,7 @@ class ElasticHelpers():
                                 timeout=self.module.params['timeout'],
                                 *self.module.params['connection_options'],
                                 **auth)
-        self.version = elastic.info()['version']['number']
-        self.module.fail_json(self.version)
+        self.version = LooseVersion(elastic.info()['version']['number'])
         return elastic
 
     def query(self, client, index, query):
