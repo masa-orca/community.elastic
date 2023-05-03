@@ -44,6 +44,7 @@ class ElasticHelpers():
     """
     def __init__(self, module):
         self.module = module
+        self.version = None
 
     def build_auth(self, module):
         '''
@@ -74,7 +75,8 @@ class ElasticHelpers():
                                 timeout=self.module.params['timeout'],
                                 *self.module.params['connection_options'],
                                 **auth)
-        self.module.fail_json(elastic.info())
+        self.version = elastic.info()['version']
+        self.module.fail_json(self.version)
         return elastic
 
     def query(self, client, index, query):
