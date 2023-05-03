@@ -76,7 +76,7 @@ class ElasticHelpers():
                                 *self.module.params['connection_options'],
                                 **auth)
         elastic_info = elastic.info()
-        self.version = elastic_info['number']
+        self.version = elastic_info.number
         self.module.fail_json(self.version)
         return elastic
 
