@@ -95,7 +95,7 @@
 
   - name: Restore a snapshot - check mode
     community.elastic.elastic_snapshot:
-      name: "rhys"
+      name: "rhys_myindex1"
       repository: "rhys"
       indices:
         - "myindex1"
@@ -111,7 +111,7 @@
 
   - name: Restore a snapshot
     community.elastic.elastic_snapshot:
-      name: "rhys"
+      name: "rhys_myindex1"
       repository: "rhys"
       state: "restore"
       indices:
