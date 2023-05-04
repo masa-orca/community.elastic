@@ -103,20 +103,10 @@
     retries: 60
     delay: 10
 
-
   - assert:
       that:
         - result.msg == "The index 'myindex1' was deleted."
         - result.changed == True
-
-  - name: Get info for myindex
-    community.elastic.elastic_index_info:
-      name: myindex
-      <<: *elastic_index_parameters
-    register: result
-    until: result.myindex is not defined
-    retries: 60
-    delay: 10
 
   - name: Restore a snapshot - check mode
     community.elastic.elastic_snapshot:
