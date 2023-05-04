@@ -63,6 +63,8 @@
     community.elastic.elastic_snapshot:
       name: "rhys"
       repository: "rhys"
+      indices:
+        - "*"
       state: "restore"
       <<: *elastic_index_parameters
     register: result
