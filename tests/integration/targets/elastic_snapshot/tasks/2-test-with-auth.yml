@@ -123,7 +123,7 @@
   - assert:
       that:
         - "result.changed == True"
-        - "'The snapshot rhys was restored' in result.msg"
+        - "'The snapshot rhys_myindex1 was restored' in result.msg"
 
   - name: Restore a snapshot
     community.elastic.elastic_snapshot:
