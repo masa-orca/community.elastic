@@ -2,9 +2,11 @@
   - name: Check that you can connect (GET) to a page and it returns a status 200
     ansible.builtin.uri:
       url: http://localhost:9200/
-    register: info
+    register: elasticsearch_info
 
-  - debug: var=info
+  - name: Set elasticsearch_version_number variable
+    ansible.builtin.set_fact:
+      elasticsearch_version_number: "{{ elasticsearch_info.version.number }}"
 
   # - import_tasks: 1-test-no-auth.yml
 

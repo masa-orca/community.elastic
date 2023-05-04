@@ -112,7 +112,6 @@
   - name: Test all wait_for values - all should pass
     community.elastic.elastic_cluster_health:
       <<: *elastic_index_parameters
-      poll: 100
       wait_for: "{{ item.wait_for }}"
       to_be: "{{ item.to_be }}"
     loop:
@@ -130,6 +129,29 @@
       - { "wait_for": 'task_max_waiting_in_queue_millis', "to_be": 0 }
       - { "wait_for": 'active_shards_percent_as_number', "to_be": 100 }
     register: elastic
+    when: "elasticsearch_version_number is version('7.17.0', '<')"
+
+  - name: Test all wait_for values - all should pass
+    community.elastic.elastic_cluster_health:
+      <<: *elastic_index_parameters
+      wait_for: "{{ item.wait_for }}"
+      to_be: "{{ item.to_be }}"
+    loop:
+      - { "wait_for": 'status', "to_be": "green" }
+      - { "wait_for": 'number_of_nodes', "to_be": 3 }
+      - { "wait_for": 'number_of_data_nodes', "to_be": 3 }
+      - { "wait_for": 'active_primary_shards', "to_be": 8 }
+      - { "wait_for": 'active_shards', "to_be": 16 }
+      - { "wait_for": 'relocating_shards', "to_be": 0 }
+      - { "wait_for": 'initializing_shards', "to_be": 0 }
+      - { "wait_for": 'unassigned_shards', "to_be": 0 }
+      - { "wait_for": 'delayed_unassigned_shards', "to_be": 0 }
+      - { "wait_for": 'number_of_pending_tasks', "to_be": 0 }
+      - { "wait_for": 'number_of_in_flight_fetch', "to_be": 0 }
+      - { "wait_for": 'task_max_waiting_in_queue_millis', "to_be": 0 }
+      - { "wait_for": 'active_shards_percent_as_number', "to_be": 100 }
+    register: elastic
+    when: "elasticsearch_version_number is version('7.17.0', '>=')"
 
   # Kill docker container tests
   #- name: Stop es02 container
