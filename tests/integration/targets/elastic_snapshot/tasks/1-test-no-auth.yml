@@ -93,19 +93,17 @@
         - "result.changed == True"
         - "'The snapshot rhys_myindex1 was successfully created' in result.msg"
 
-  - name: Delete an index called myindex1 - check_mode
+  - name: Delete an index called myindex1
     community.elastic.elastic_index:
       name: myindex1
       state: absent
       <<: *elastic_index_parameters
-    check_mode: yes
     register: result
 
   - assert:
       that:
         - result.msg == "The index 'myindex1' was deleted."
         - result.changed == True
-
 
   - name: Restore a snapshot - check mode
     community.elastic.elastic_snapshot:
