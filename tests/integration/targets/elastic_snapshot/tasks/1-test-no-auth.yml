@@ -115,6 +115,10 @@
       <<: *elastic_index_parameters
     check_mode: yes
     register: result
+    until: result.changed | bool
+    retries: 60
+    delay: 10
+
 
   - assert:
       that:
