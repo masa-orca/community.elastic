@@ -109,7 +109,6 @@
   - name: Test all wait_for values - all should pass
     community.elastic.elastic_cluster_health:
       <<: *elastic_index_parameters
-      poll: 100
       wait_for: "{{ item.wait_for }}"
       to_be: "{{ item.to_be }}"
     loop:
