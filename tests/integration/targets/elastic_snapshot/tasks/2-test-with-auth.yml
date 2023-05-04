@@ -115,6 +115,8 @@
     community.elastic.elastic_snapshot:
       name: "rhys_myindex1"
       repository: "rhys"
+      indices:
+        - "myindex1"
       state: "restore"
       <<: *elastic_index_parameters
     check_mode: yes
@@ -129,6 +131,8 @@
     community.elastic.elastic_snapshot:
       name: "rhys_myindex1"
       repository: "rhys"
+      indices:
+        - "myindex1"
       state: "restore"
       <<: *elastic_index_parameters
     register: result
