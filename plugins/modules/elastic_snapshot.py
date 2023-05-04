@@ -167,7 +167,9 @@ def restore_snapshot(module, client, repository, name):
                                                 body=body))
         if not isinstance(response, dict):  # Valid response should be a dict
             module.fail_json(msg="Invalid response received: {0}.".format(str(response)))
-        if response['snapshot']['shards']['failed'] > 0:
+        if ('accepted' in response.keys() and response['accepted']):
+            pass
+        elif response['snapshot']['shards']['failed'] > 0:
             module.fail_json(msg="The restore process encountered failures: {0}".format(str(response)))
     except Exception as excep:
         module.fail_json(msg=str(response))
