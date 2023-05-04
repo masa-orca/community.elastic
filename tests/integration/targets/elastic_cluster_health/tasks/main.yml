@@ -6,7 +6,7 @@
 
   - name: Set elasticsearch_version_number variable
     ansible.builtin.set_fact:
-      elasticsearch_version_number: "{{ elasticsearch_info.version.number }}"
+      elasticsearch_version_number: "{{ elasticsearch_info.json.version.number }}"
 
   - import_tasks: 1-test-no-auth.yml
 
