@@ -172,8 +172,7 @@ def restore_snapshot(module, client, repository, name):
         elif response['snapshot']['shards']['failed'] > 0:
             module.fail_json(msg="The restore process encountered failures: {0}".format(str(response)))
     except Exception as excep:
-        module.fail_json(msg=str(response))
-        # module.fail_json(msg=str(excep))
+        module.fail_json(msg=str(excep))
     return response
 
 
