@@ -121,6 +121,8 @@ jobs:
             kibana_version: 7.14.2
           - elasticsearch_version: 7.16.3
             kibana_version: 7.16.3
+          # - elasticsearch_version: 7.17.10
+          #   kibana_version: 7.17.10
     steps:
 
       - name: Check out code
