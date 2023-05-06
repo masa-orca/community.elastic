@@ -5,9 +5,10 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: elastic_cluster_health
 
@@ -88,9 +89,9 @@ options:
       - yellow
       - red
     default: green
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Validate cluster health
   community.elastic.elastic_cluster_health:
 
@@ -103,10 +104,10 @@ EXAMPLES = r'''
   community.elastic.elastic_cluster_health:
     wait_for_nodes: ">=10"
     timeout: 2m
-'''
+"""
 
-RETURN = r'''
-'''
+RETURN = r"""
+"""
 
 
 from ansible.module_utils.basic import AnsibleModule
@@ -118,21 +119,17 @@ from ansible_collections.community.elastic.plugins.module_utils.elastic_common i
     elastic_found,
     E_IMP_ERR,
     elastic_common_argument_spec,
-    ElasticHelpers
+    ElasticHelpers,
 )
 import time
 
 
 def elastic_status(desired_status, cluster_status):
-    '''
+    """
     Return true if the desired status is equal to or less
     than the cluster status.
-    '''
-    status_dict = {
-        "red": 0,
-        "yellow": 1,
-        "green": 2
-    }
+    """
+    status_dict = {"red": 0, "yellow": 1, "green": 2}
     if status_dict[desired_status] <= status_dict[cluster_status]:
         return True
     else:
@@ -140,9 +137,9 @@ def elastic_status(desired_status, cluster_status):
 
 
 def cast_to_be(to_be):
-    '''
+    """
     Cast the value to int if possible. Otherwise return the str value
-    '''
+    """
     try:
         to_be = int(to_be)
     except ValueError:
@@ -156,54 +153,54 @@ def cast_to_be(to_be):
 
 
 def main():
-
     wait_for_choices = [
-        'status',
-        'number_of_nodes',
-        'number_of_data_nodes',
-        'active_primary_shards',
-        'active_shards',
-        'relocating_shards',
-        'initializing_shards',
-        'unassigned_shards',
-        'delayed_unassigned_shards',
-        'number_of_pending_tasks',
-        'number_of_in_flight_fetch',
-        'task_max_waiting_in_queue_millis',
-        'active_shards_percent_as_number'
+        "status",
+        "number_of_nodes",
+        "number_of_data_nodes",
+        "active_primary_shards",
+        "active_shards",
+        "relocating_shards",
+        "initializing_shards",
+        "unassigned_shards",
+        "delayed_unassigned_shards",
+        "number_of_pending_tasks",
+        "number_of_in_flight_fetch",
+        "task_max_waiting_in_queue_millis",
+        "active_shards_percent_as_number",
     ]
 
     argument_spec = elastic_common_argument_spec()
     argument_spec.update(
-        level=dict(type='str', choices=['cluster', 'indicies', 'shards'], default='cluster'),
-        local=dict(type='bool', default=False),
-        status=dict(type='str', choices=['green', 'yellow', 'red'], default='green'),
-        wait_for=dict(type='str', choices=wait_for_choices, default=None),
-        to_be=dict(type='str'),
-        poll=dict(type='int', default=3),
-        interval=dict(type='int', default=10),
-        fail_on_exception=dict(type='bool', default=False)
+        level=dict(
+            type="str", choices=["cluster", "indicies", "shards"], default="cluster"
+        ),
+        local=dict(type="bool", default=False),
+        status=dict(type="str", choices=["green", "yellow", "red"], default="green"),
+        wait_for=dict(type="str", choices=wait_for_choices, default=None),
+        to_be=dict(type="str"),
+        poll=dict(type="int", default=3),
+        interval=dict(type="int", default=10),
+        fail_on_exception=dict(type="bool", default=False),
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=False,
         required_together=[
-            ['login_user', 'login_password'],
-            ['wait_for', 'to_be'],
+            ["login_user", "login_password"],
+            ["wait_for", "to_be"],
         ],
     )
 
     if not elastic_found:
-        module.fail_json(msg=missing_required_lib('elasticsearch'),
-                         exception=E_IMP_ERR)
+        module.fail_json(msg=missing_required_lib("elasticsearch"), exception=E_IMP_ERR)
 
-    fail_on_exception = module.params['fail_on_exception']
-    interval = module.params['interval']
-    status = module.params['status']
-    poll = module.params['poll']
-    to_be = module.params['to_be']
-    wait_for = module.params['wait_for']
+    fail_on_exception = module.params["fail_on_exception"]
+    interval = module.params["interval"]
+    status = module.params["status"]
+    poll = module.params["poll"]
+    to_be = module.params["to_be"]
+    wait_for = module.params["wait_for"]
 
     try:
         elastic = ElasticHelpers(module)
@@ -219,21 +216,28 @@ def main():
         while iterations < poll:
             try:
                 iterations += 1
-                response = client.cluster.health(level=module.params['level'],
-                                                 local=module.params['local'])
+                response = client.cluster.health(
+                    level=module.params["level"], local=module.params["local"]
+                )
                 health_data = dict(response)
-                if 'status' not in health_data.keys():
-                    module.fail_json(msg="Elasticsearch health endpoint did not supply a status field.")
+                if "status" not in health_data.keys():
+                    module.fail_json(
+                        msg="Elasticsearch health endpoint did not supply a status field."
+                    )
                 else:
-                    if elastic_status(status, health_data['status']):
+                    if elastic_status(status, health_data["status"]):
                         msg = "Elasticsearch health is good."
                         if wait_for is not None:
                             if health_data[wait_for] == cast_to_be(to_be):
-                                msg += " The variable {0} has reached the value {1}.".format(wait_for, to_be)
+                                msg += " The variable {0} has reached the value {1}.".format(
+                                    wait_for, to_be
+                                )
                                 failed = False
                                 break
                             else:
-                                msg = "The variable {0} did not reached the value {1}.".format(wait_for, to_be)
+                                msg = "The variable {0} did not reached the value {1}.".format(
+                                    wait_for, to_be
+                                )
                                 failures += 1
                         else:
                             failed = False
@@ -257,16 +261,18 @@ def main():
         if not msg:
             msg = "Timed out waiting for elastic health to converge."
 
-        module.exit_json(changed=False,
-                         msg=msg,
-                         failed=failed,
-                         iterations=iterations,
-                         failures=failures,
-                         **health_data)
+        module.exit_json(
+            changed=False,
+            msg=msg,
+            failed=failed,
+            iterations=iterations,
+            failures=failures,
+            **health_data
+        )
 
     except Exception as excep:
-        module.fail_json(msg='Elastic error: %s' % to_native(excep))
+        module.fail_json(msg="Elastic error: %s" % to_native(excep))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
