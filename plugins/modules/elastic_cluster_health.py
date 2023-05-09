@@ -209,7 +209,7 @@ def main():
         if "wait_for_status" in module.params.keys():
             params["wait_for_status"] = module.params["wait_for_status"]
 
-        response = client.cluster.health(params)
+        response = client.cluster.health(**params)
         health_data = dict(response)
         module.fail_json(
             msg="Elasticsearch health endpoint did not supply a status field."
