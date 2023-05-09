@@ -193,12 +193,14 @@ def main():
         params["wait_for_active_shards"] = module.params["wait_for_active_shards"]
         if "wait_for_events" in module.params.keys():
             params["wait_for_events"] = module.params["wait_for_events"]
-        params["wait_for_no_initializing_shards"] = module.params[
-            "wait_for_no_initializing_shards"
-        ]
-        params["wait_for_no_relocating_shards"] = module.params[
-            "wait_for_no_relocating_shards"
-        ]
+        if  module.params["wait_for_no_initializing_shards"]:
+            params["wait_for_no_initializing_shards"] = 'true'
+        else:
+            params["wait_for_no_initializing_shards"] = 'false'
+        if module.params["wait_for_no_relocating_shards"]:
+            params["wait_for_no_relocating_shards"] = 'true'
+        else:
+            params["wait_for_no_relocating_shards"] = "false"
         if "wait_for_nodes" in module.params.keys():
             params["wait_for_nodes"] = module.params["wait_for_nodes"]
         params["wait_for_status"] = module.params["wait_for_status"]
