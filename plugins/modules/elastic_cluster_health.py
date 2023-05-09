@@ -217,7 +217,7 @@ def main():
                 msg="Elasticsearch health endpoint did not supply a status field."
             )
 
-        module.exit_json(changed=False, health=health_data)
+        module.exit_json(changed=False, cluster_health=health_data)
 
     except Exception as excep:
         module.fail_json(msg="Elastic error: %s" % to_native(excep))
