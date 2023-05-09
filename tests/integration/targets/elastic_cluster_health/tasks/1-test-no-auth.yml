@@ -11,6 +11,8 @@
     ignore_errors: yes
     register: elastic
 
+  - debug: var=elastic
+
   - assert:
       that:
         - "elastic.msg == 'Elasticsearch health is good.'"
