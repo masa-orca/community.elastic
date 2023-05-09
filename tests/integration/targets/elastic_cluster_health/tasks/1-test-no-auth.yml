@@ -24,7 +24,7 @@
   - name: Basic module test - single node no auth
     community.elastic.elastic_cluster_health:
       <<: *elastic_index_parameters
-      wait_for_status: red
+      wait_for_nodes: '>10'
     ignore_errors: yes
     register: elastic
 
