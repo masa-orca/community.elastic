@@ -48,12 +48,6 @@ options:
       - This parameter is referred by cluster health API.
     type: str
     default: 30s
-  timeout:
-    description:
-      - Period to wait for a response.
-      - This parameter is referred by cluster health API.
-    type: str
-    default: 30s
   wait_for_active_shards:
     description:
       - A number controlling to how many active shards wait for.
@@ -167,7 +161,6 @@ def main():
         ),
         local=dict(type="bool", default=False),
         master_timeout=dict(type="str", default="30s"),
-        timeout=dict(type="str", default="30s"),
         wait_for_active_shards=dict(type="str", default="0"),
         wait_for_events=dict(type="str", choices=wait_for_events_values),
         wait_for_no_initializing_shards=dict(type="bool", default=False),
@@ -197,7 +190,6 @@ def main():
         params["level"] = module.params["level"]
         params["local"] = module.params["local"]
         params["master_timeout"] = module.params["master_timeout"]
-        params["timeout"] = module.params["timeout"]
         params["wait_for_active_shards"] = module.params["wait_for_active_shards"]
         if "wait_for_events" in module.params.keys():
             params["wait_for_events"] = module.params["wait_for_events"]
