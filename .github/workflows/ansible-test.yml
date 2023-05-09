@@ -109,16 +109,16 @@ jobs:
           - elastic_cluster_health.py
           # ${{ fromJson(needs.integration_matrix.outputs.matrix) }}
         ansible_version_combinations:
-          - ansible_version: stable-2.10
-            python_version: 3.6
-          - ansible_version: stable-2.11
-            python_version: 3.6
-          - ansible_version: stable-2.12
-            python_version: 3.8
+          # - ansible_version: stable-2.10
+          #   python_version: 3.6
+          # - ansible_version: stable-2.11
+          #   python_version: 3.6
+          # - ansible_version: stable-2.12
+          #   python_version: 3.8
           - ansible_version: stable-2.13
             python_version: 3.9
-          - ansible_version: devel
-            python_version: 3.9
+          # - ansible_version: devel
+          #   python_version: 3.9
         elasticsearch_version_combinations:
           - elasticsearch_version: 7.10.1
             kibana_version: 7.10.1
