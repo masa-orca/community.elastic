@@ -220,6 +220,8 @@ def main():
         module.exit_json(changed=False, cluster_health=health_data)
     except elasticsearch.exceptions.ConnectionTimeout:
         module.fail_json(msg="Connection timeouted")
+    except elasticsearch.exceptions.TransportError as e:
+        module.fail_json(msg=dict(e))
     except Exception as excep:
         module.fail_json(msg="Elastic error: %s" % to_native(excep))
 
