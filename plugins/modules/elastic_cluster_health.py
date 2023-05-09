@@ -212,7 +212,7 @@ def main():
         response = client.cluster.health(**params)
         health_data = dict(response)
         module.fail_json(
-            msg="Elasticsearch health endpoint did not supply a status field."
+            msg=health_data
         )
 
         if "status" not in health_data.keys():
