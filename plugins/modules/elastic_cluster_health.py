@@ -188,12 +188,15 @@ def main():
 
         params = {}
         params["level"] = module.params["level"]
-        params["local"] = module.params["local"]
+        if module.params["local"]:
+            params["local"] = "true"
+        else:
+            params["local"] = "false"
         params["master_timeout"] = module.params["master_timeout"]
         params["wait_for_active_shards"] = module.params["wait_for_active_shards"]
         if "wait_for_events" in module.params.keys():
             params["wait_for_events"] = module.params["wait_for_events"]
-        if  module.params["wait_for_no_initializing_shards"]:
+        if module.params["wait_for_no_initializing_shards"]:
             params["wait_for_no_initializing_shards"] = 'true'
         else:
             params["wait_for_no_initializing_shards"] = 'false'
