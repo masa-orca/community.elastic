@@ -59,7 +59,7 @@ options:
       - A number controlling to how many active shards wait for.
       - If you set C(all), this module waits for all shards in the cluster to be active.
     type: str
-    default: 0
+    default: "0"
   wait_for_events:
     description:
       - Waiting for all of currently queued events of the priority.
@@ -94,7 +94,6 @@ options:
       - green
       - yellow
       - red
-    default: green
 """
 
 EXAMPLES = r"""
@@ -170,12 +169,12 @@ def main():
         master_timeout=dict(type="str", default="30s"),
         timeout=dict(type="str", default="30s"),
         wait_for_active_shards=dict(type="str", default="0"),
-        wait_for_events=dict(type="str", choices=wait_for_events_values, default="0"),
+        wait_for_events=dict(type="str", choices=wait_for_events_values),
         wait_for_no_initializing_shards=dict(type="bool", default=False),
         wait_for_no_relocating_shards=dict(type="bool", default=False),
         wait_for_nodes=dict(type="str"),
         wait_for_status=dict(
-            type="str", choices=["green", "yellow", "red"], default="0"
+            type="str", choices=["green", "yellow", "red"]
         ),
     )
 
