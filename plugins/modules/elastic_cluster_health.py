@@ -206,7 +206,8 @@ def main():
             params["wait_for_no_relocating_shards"] = "false"
         if "wait_for_nodes" in module.params.keys():
             params["wait_for_nodes"] = module.params["wait_for_nodes"]
-        params["wait_for_status"] = module.params["wait_for_status"]
+        if "wait_for_status" in module.params.keys():
+            params["wait_for_status"] = module.params["wait_for_status"]
 
         response = client.cluster.health(params=params)
         health_data = dict(response)
