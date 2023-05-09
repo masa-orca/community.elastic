@@ -159,14 +159,7 @@ def cast_to_be(to_be):
 
 
 def main():
-    wait_for_events_values = [
-      "immediate",
-      "urgent",
-      "high",
-      "normal",
-      "low",
-      "languid"
-    ]
+    wait_for_events_values = ["immediate", "urgent", "high", "normal", "low", "languid"]
 
     argument_spec = elastic_common_argument_spec()
     argument_spec.update(
@@ -181,7 +174,9 @@ def main():
         wait_for_no_initializing_shards=dict(type="bool", default=False),
         wait_for_no_relocating_shards=dict(type="bool", default=False),
         wait_for_nodes=dict(type="str"),
-        wait_for_status=dict(type="str", choices=['green', 'yellow', 'red'], default="0")
+        wait_for_status=dict(
+            type="str", choices=["green", "yellow", "red"], default="0"
+        ),
     )
 
     module = AnsibleModule(
@@ -200,22 +195,24 @@ def main():
         client = elastic.connect()
 
         params = {}
-        params['level'] = module.params["level"]
-        params['local'] = module.params["local"]
-        params['master_timeout'] = module.params["master_timeout"]
-        params['timeout'] = module.params["timeout"]
-        params['wait_for_active_shards'] = module.params["wait_for_active_shards"]
-        if "wait_for_events" in  module.params.keys():
-            params['wait_for_events'] = module.params["wait_for_events"]
-        params['wait_for_no_initializing_shards'] = module.params["wait_for_no_initializing_shards"]
-        params['wait_for_no_relocating_shards'] = module.params["wait_for_no_relocating_shards"]
-        if "wait_for_nodes" in  module.params.keys():
-            params['wait_for_nodes'] = module.params["wait_for_nodes"]
-        params['wait_for_status'] = module.params["wait_for_status"]
+        params["level"] = module.params["level"]
+        params["local"] = module.params["local"]
+        params["master_timeout"] = module.params["master_timeout"]
+        params["timeout"] = module.params["timeout"]
+        params["wait_for_active_shards"] = module.params["wait_for_active_shards"]
+        if "wait_for_events" in module.params.keys():
+            params["wait_for_events"] = module.params["wait_for_events"]
+        params["wait_for_no_initializing_shards"] = module.params[
+            "wait_for_no_initializing_shards"
+        ]
+        params["wait_for_no_relocating_shards"] = module.params[
+            "wait_for_no_relocating_shards"
+        ]
+        if "wait_for_nodes" in module.params.keys():
+            params["wait_for_nodes"] = module.params["wait_for_nodes"]
+        params["wait_for_status"] = module.params["wait_for_status"]
 
-        response = client.cluster.health(
-            params=params
-        )
+        response = client.cluster.health(params=params)
         health_data = dict(response)
         module.fail_json(
             msg="Elasticsearch health endpoint did not supply a status field."
@@ -228,10 +225,7 @@ def main():
 
         msg = "Elasticsearch health is good."
 
-        module.exit_json(
-            changed=False,
-            msg=msg
-        )
+        module.exit_json(changed=False, msg=msg)
 
     except Exception as excep:
         module.fail_json(msg="Elastic error: %s" % to_native(excep))
