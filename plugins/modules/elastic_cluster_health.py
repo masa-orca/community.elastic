@@ -121,7 +121,7 @@ from ansible_collections.community.elastic.plugins.module_utils.elastic_common i
     ElasticHelpers,
 )
 import time
-
+import elasticsearch
 
 def elastic_status(desired_status, cluster_status):
     """
@@ -218,7 +218,8 @@ def main():
             )
 
         module.exit_json(changed=False, cluster_health=health_data)
-
+    except elasticsearch.exceptions.ConnectionTimeout as connection_timeout_exception:
+        module.fail_json(msg="Connection timeout")
     except Exception as excep:
         module.fail_json(msg="Elastic error: %s" % to_native(excep))
 
