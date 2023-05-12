@@ -44,6 +44,7 @@
     community.elastic.elastic_cluster_health:
       <<: *elastic_index_parameters
       level: indicies
+      wait_for_active_shards: 6
     ignore_errors: yes
     register: elastic
 
