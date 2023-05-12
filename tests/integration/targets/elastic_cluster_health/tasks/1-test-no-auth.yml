@@ -21,59 +21,16 @@
         - "elastic.cluster_health.number_of_nodes == 1"
 
 
-  - name: Basic module test - single node no auth
+  - name: Wait for nodes is over 10 (will be timeout)
     community.elastic.elastic_cluster_health:
       <<: *elastic_index_parameters
       wait_for_nodes: '>10'
     ignore_errors: yes
     register: elastic
 
-  - debug: var=elastic
-
-
   - assert:
       that:
-        - "elastic.active_primary_shards == 0"
-        - "elastic.active_shards == 0"
-        - "elastic.active_shards_percent_as_number == 100.0"
-        - "elastic.changed == False"
-        - "elastic.cluster_name == 'docker-cluster'"
-        - "elastic.delayed_unassigned_shards == 0"
-        - "elastic.initializing_shards == 0"
-        - "elastic.msg == 'Elasticsearch health is good.'"
-        - "elastic.number_of_data_nodes == 1"
-        - "elastic.number_of_in_flight_fetch == 0"
-        - "elastic.number_of_nodes == 1"
-        - "elastic.number_of_pending_tasks >= 0"
-        - "elastic.relocating_shards == 0"
-        - "elastic.status == 'green'"
-        - "elastic.task_max_waiting_in_queue_millis >= 0"
-        - "elastic.timed_out == false"
-        - "elastic.unassigned_shards == 0"
-
-  - name: Test with indicies level 1
-    community.elastic.elastic_cluster_health:
-      <<: *elastic_index_parameters
-      level: indicies
-    register: elastic
-
-  - assert:
-      that:
-        - "elastic.changed == False"
-        - "elastic.status == 'green'"
-        - "elastic.msg == 'Elasticsearch health is good.'"
-
-  - name: Test with shards level 1
-    community.elastic.elastic_cluster_health:
-      <<: *elastic_index_parameters
-      level: shards
-    register: elastic
-
-  - assert:
-      that:
-        - "elastic.changed == False"
-        - "elastic.status == 'green'"
-        - "elastic.msg == 'Elasticsearch health is good.'"
+        - 'elastic.msg == "Request was reached timeout"'
 
   - name: Create an index with too many replicas
     community.elastic.elastic_index:
@@ -90,6 +47,8 @@
     ignore_errors: yes
     register: elastic
 
+  - debug: var=elastic
+
   - assert:
       that:
         - "elastic.changed == False"
@@ -105,6 +64,8 @@
       level: shards
     ignore_errors: yes
     register: elastic
+
+  - debug: var=elastic
 
   - assert:
       that:
