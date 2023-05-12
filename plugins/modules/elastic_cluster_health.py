@@ -221,7 +221,7 @@ def main():
     except elasticsearch.exceptions.ConnectionTimeout:
         module.fail_json(msg="Connection timeouted")
     except elasticsearch.TransportError as e:
-        module.fail_json(msg=dict(e))
+        module.fail_json(msg="Request was reached timeout")
     except Exception as excep:
         module.fail_json(msg="Elastic error: %s" % to_native(excep))
 
