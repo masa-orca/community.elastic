@@ -29,7 +29,7 @@ extends_documentation_fragment:
 options:
   level:
     description:
-      - Controls the details level of the health information returned
+      - The details level of the health information.
     type: str
     choices:
       - cluster
@@ -38,25 +38,23 @@ options:
     default: cluster
   local:
     description:
-      - If true, the request retrieves information from the local node only.
-      - Defaults to false, which means information is retrieved from the master node.
+      - Retrieves information from the local node only if you set C(true).
     type: bool
     default: false
   master_timeout:
     description:
       - Period to wait for a connection to the master node.
-      - This parameter is referred by cluster health API.
     type: str
     default: 30s
   wait_for_active_shards:
     description:
-      - A number controlling to how many active shards wait for.
+      - A number of waiting for active shards.
       - If you set C(all), this module waits for all shards in the cluster to be active.
     type: str
     default: "0"
   wait_for_events:
     description:
-      - Waiting for all of currently queued events of the priority.
+      - A priority of waiting for all of currently queued events.
     type: str
     choices:
       - immediate
@@ -72,13 +70,13 @@ options:
     default: false
   wait_for_no_relocating_shards:
     description:
-      - If you set C(true), this module waits  for the cluster to have no shard relocations.
+      - If you set C(true), this module waits for the cluster to have no shard relocations.
     type: bool
     default: false
   wait_for_nodes:
     description:
       - Waiting for a number of node is available.
-      - Please set value like C(<=N) or C(lt(N)).
+      - Please set value like C(<=10) or C(lt(10)).
     type: str
   wait_for_status:
     description:
@@ -120,31 +118,6 @@ from ansible_collections.community.elastic.plugins.module_utils.elastic_common i
     elastic_common_argument_spec,
     ElasticHelpers,
 )
-import time
-import elasticsearch
-
-def elastic_status(desired_status, cluster_status):
-    """
-    Return true if the desired status is equal to or less
-    than the cluster status.
-    """
-    status_dict = {"red": 0, "yellow": 1, "green": 2}
-    if status_dict[desired_status] <= status_dict[cluster_status]:
-        return True
-    else:
-        return False
-
-
-def cast_to_be(to_be):
-    """
-    Cast the value to int if possible. Otherwise return the str value
-    """
-    try:
-        to_be = int(to_be)
-    except ValueError:
-        pass
-    return to_be
-
 
 # ================
 # Module execution
@@ -183,6 +156,7 @@ def main():
         module.fail_json(msg=missing_required_lib("elasticsearch"), exception=E_IMP_ERR)
 
     try:
+        import elasticsearch
         elastic = ElasticHelpers(module)
         client = elastic.connect()
 
