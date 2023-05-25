@@ -49,7 +49,7 @@
 
   - assert:
       that:
-        - "elastic.status == 'yellow'"
+        - "elastic.cluster_health.status == 'yellow'"
 
 
   - name: Test with shards level 2
@@ -60,7 +60,7 @@
 
   - assert:
       that:
-        - "elastic.status == 'yellow'"
+        - "elastic.cluster_health.status == 'yellow'"
 
   - name: Delete index to return cluster to a green status
     community.elastic.elastic_index:
