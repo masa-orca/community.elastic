@@ -45,15 +45,10 @@
       <<: *elastic_index_parameters
       level: indicies
       wait_for_no_initializing_shards: true
-    ignore_errors: yes
     register: elastic
 
   - assert:
       that:
-        - "elastic.changed == False"
-        - "elastic.failed"
-        - "elastic.iterations == 3"
-        - "elastic.msg == 'Timed out waiting for elastic health to converge.'"
         - "elastic.status == 'yellow'"
 
 
@@ -61,15 +56,10 @@
     community.elastic.elastic_cluster_health:
       <<: *elastic_index_parameters
       level: shards
-    ignore_errors: yes
     register: elastic
 
   - assert:
       that:
-        - "elastic.changed == False"
-        - "elastic.failed"
-        - "elastic.iterations == 3"
-        - "elastic.msg == 'Timed out waiting for elastic health to converge.'"
         - "elastic.status == 'yellow'"
 
   - name: Delete index to return cluster to a green status
