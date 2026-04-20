@@ -13,12 +13,13 @@ ansible-galaxy collection install community.elastic
 
 # Installing the latest development version
 
-Both Elasticsearch server version 7 and 8 are supported. But the version
+Elasticsearch server version 7, 8 and 9 are supported. But the version
 of elasticesearch Python library must be aligned with Elasticsearch server.
 
 ```bash
 pip install elasticsearch==7.*  # To connect to Elasticsearch 7.x
 pip install elasticsearch==8.*  # To connect to Elasticsearch 8.x
+pip install elasticsearch==9.*  # To connect to Elasticsearch 9.x
 ```
 
 ```bash

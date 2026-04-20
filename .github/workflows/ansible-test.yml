@@ -27,18 +27,13 @@ jobs:
           # Add new versions announced in
           # https://github.com/ansible-collections/news-for-maintainers in a timely manner,
           # consider dropping testing against EOL versions and versions you don't support.
-          - stable-2.13
-          - stable-2.14
-          - stable-2.15
-          - stable-2.16
+          - stable-2.18
+          - stable-2.19
+          - stable-2.20
         # - devel
           - milestone
-    runs-on: >-
-      ${{ contains(fromJson(
-          '["stable-2.9", "stable-2.10", "stable-2.11"]'
-      ), matrix.ansible) && 'ubuntu-24.04' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     steps:
-
       # Run sanity tests inside a Docker container.
       # The docker container has all the pinned dependencies that are
       # required and all Python versions Ansible supports.
@@ -128,23 +123,24 @@ jobs:
       matrix:
         elastic_module: ${{ fromJson(needs.integration_matrix.outputs.matrix) }}
         ansible_version_combinations:
-          - ansible_version: stable-2.13
-            python_version: "3.9"
-          - ansible_version: stable-2.14
-            python_version: "3.10"
-          - ansible_version: stable-2.15
-            python_version: "3.10"
-          - ansible_version: stable-2.16
-            python_version: "3.11"
-          - ansible_version: milestone
+          - ansible_version: stable-2.18
             python_version: "3.13"
+          - ansible_version: stable-2.19
+            python_version: "3.13"
+          - ansible_version: stable-2.20
+            python_version: "3.14"
+          - ansible_version: milestone
+            python_version: "3.14"
         elasticsearch_version_combinations:
-          - elasticsearch_version: 7.10.1
-            kibana_version: 7.10.1
+          - elasticsearch_version: 7.17.29
+            kibana_version: 7.17.29
             elasticsearch_python_lib: elasticsearch==7.*
-          - elasticsearch_version: 8.8.2
-            kibana_version: 8.8.2
+          - elasticsearch_version: 8.19.14
+            kibana_version: 8.19.14
             elasticsearch_python_lib: elasticsearch==8.*
+          - elasticsearch_version: 9.3.0
+            kibana_version: 9.3.0
+            elasticsearch_python_lib: elasticsearch==9.*
 
     steps:
 

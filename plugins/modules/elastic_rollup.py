@@ -148,7 +148,8 @@ from ansible_collections.community.elastic.plugins.module_utils.elastic_common i
     elastic_found,
     E_IMP_ERR,
     elastic_common_argument_spec,
-    ElasticHelpers
+    ElasticHelpers,
+    __version__
 )
 import json
 
@@ -199,7 +200,6 @@ def job_is_different(current_job, module):
 
 
 def main():
-
     state_choices = [
         "present",
         "absent",
@@ -229,6 +229,9 @@ def main():
     if not elastic_found:
         module.fail_json(msg=missing_required_lib('elasticsearch'),
                          exception=E_IMP_ERR)
+
+    if __version__ > (8, 11, 0):
+        module.fail_json(msg="rollup is deprecated")
 
     name = module.params['name']
     index_pattern = module.params['index_pattern']
