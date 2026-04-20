@@ -79,8 +79,10 @@ class ElasticHelpers():
 
         if module.params['auth_method'] == 'http_auth':
             # username/password authentication.
-            auth["http_auth"] = (module.params['login_user'],
-                                 module.params['login_password'])
+            auth["basic_auth" if __version__ >= (8, 0, 0) else "http_auth"] = (
+                module.params['login_user'],
+                module.params['login_password']
+            )
         elif module.params['auth_method'] == 'api_key':
             # api key authentication. Won't work for v7 of the driver
             # The api_key is actually the base64 encoded version of
@@ -103,9 +105,13 @@ class ElasticHelpers():
         options = dict(self.module.params['connection_options'])
         options.update(auth)
         hosts = [self.build_connection_url(host) for host in self.module.params['login_hosts']]
-        elastic = Elasticsearch(hosts,
-                                timeout=self.module.params['timeout'],
-                                **options)
+
+        if __version__ >= (8, 0, 0):
+            options.update(request_timeout=self.module.params['timeout'])
+        else:
+            options.update(timeout=self.module.params['timeout'])
+
+        elastic = Elasticsearch(hosts, **options)
         return elastic
 
     def query(self, client, index, query):

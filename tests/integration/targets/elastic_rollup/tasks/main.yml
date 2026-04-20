@@ -1,12 +1,15 @@
 ---
-  - import_tasks: 1-test-no-auth.yml
+  - name: Test if Elasticsearch version until 8.11.0
+    when: elasticsearch_version is version('8.11.0', '<=')
+    block:
+      - import_tasks: 1-test-no-auth.yml
 
-  - name: Run handlers to remove previous es instances
-    meta: flush_handlers
+      - name: Run handlers to remove previous es instances
+        meta: flush_handlers
 
-  - name: Set docker-compose file
-    set_fact:
-      docker_compose_file: single-node-elastic-with-auth.yml
+      - name: Set docker-compose file
+        set_fact:
+          docker_compose_file: single-node-elastic-with-auth.yml
 
   #- import_role:
   #    name: setup_elastic

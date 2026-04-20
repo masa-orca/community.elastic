@@ -13,6 +13,9 @@
       name: myindex1
       <<: *elastic_index_parameters
     register: result
+    until: result.changed
+    retries: 30
+    delay: 5
 
   - assert:
       that:

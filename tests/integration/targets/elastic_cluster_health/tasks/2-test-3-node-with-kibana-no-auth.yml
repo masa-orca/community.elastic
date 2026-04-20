@@ -129,9 +129,9 @@
       - { "wait_for": 'active_shards_percent_as_number', "to_be": 100 }
     vars:
       active_primary_shards: >
-        {{18 if elasticsearch_version is version('8.0.0', '>=') else 6}}
+        {% if elasticsearch_version is version('9.0.0', '>=') %}36{% elif elasticsearch_version is version('8.0.0', '>=') %}35{% else %}7{% endif %}
       active_shards: >
-        {{37 if elasticsearch_version is version('8.0.0', '>=') else 12}}
+        {% if elasticsearch_version is version('9.0.0', '>=') %}72{% elif elasticsearch_version is version('8.0.0', '>=') %}70{% else %}14{% endif %}
     register: elastic
 
   # Kill docker container tests
